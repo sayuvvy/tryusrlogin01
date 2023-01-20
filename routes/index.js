@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     try {
 //        const books = await Book.find().sort({ createdAt : 'desc' }).limit(10).exec()
         res.render('index', {  })
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/login', async (req, res) => {
+router.get('/login', (req, res) => {
     try {
 //        const books = await Book.find().sort({ createdAt : 'desc' }).limit(10).exec()
         res.render('login', {  })
@@ -20,7 +20,7 @@ router.get('/login', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
     try {
 //        const books = await Book.find().sort({ createdAt : 'desc' }).limit(10).exec()
         res.render('index', {  })
@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.get('/register', async (req, res) => {
+router.get('/register', (req, res) => {
     try {
 //        const books = await Book.find().sort({ createdAt : 'desc' }).limit(10).exec()
         res.render('register', {  })
