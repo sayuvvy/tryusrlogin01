@@ -2,10 +2,8 @@ const express = require('express')
 const session = require('express-session')
 const cors = require('cors')
 const expressLayouts = require('express-ejs-layouts')
-
+const User = require('./models/User')
 const indexRouter = require('./routes/index')
-
-const hbs = require('express-handlebars')
 
 const mongoose = require('mongoose')
 const passport = require('passport')
@@ -20,29 +18,13 @@ const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', ()=> console.log('connected successfully to mongoose'))
 
-const UserSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
-})
-
-const User = mongoose.model('User', UserSchema)
-
-//app.engine('hbs', hbs({extname: '.hbs'}))
-//app.set('view engine', 'hbs')
-
 app.use(expressLayouts);
 
+app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 
-app.use(express.static(__dirname + 'public'))
 app.use(session({
     secret: "testsecret",
     resave: false,
@@ -72,11 +54,11 @@ passport.deserializeUser(function(id, done){
 passport.use(new localStrategy(function(username, password, done){
     User.findOne({username: username}, function(err, user){
         if (err) {return done(err)}
-        if (!user) { return done(null, false, { messge: 'Incorrect Username'})}
+        if (!user) { console.log('Incorrect User'); return done(null, false, { errorMessage: 'Incorrect Username'})}
 
         bcrypt.compare(password, user.password, function(err, res){
             if (err) {return done(err)}
-            if (res === false) {return done(null, false, {message: 'Incorrect Password'})}
+            if (res === false) { console.log('Incorrect Password'); return done(null, false, { errorMessage: 'Incorrect Password'})}
 
             return done(null, user);
         })
